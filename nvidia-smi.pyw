@@ -15,7 +15,9 @@ def read_smi():
 
 class Avg:
     powers = []
-    avg_count = 10
+    time = 0.25
+    total_time = 5
+    avg_count = int(total_time / time)
 
     def cal(self, cur_power):
         cur_power = float(cur_power)
@@ -31,17 +33,16 @@ def update():
         command = read_smi()
         match = pattern.findall(command)
         power = avg.cal(match[0])
-        time.sleep(0.25)
-        power_num = "power:{:.2f}W".format(power)
+        time.sleep(avg.time)
+        power_num = "cur:{:.2f}W\n{}s:{:.2f}W".format(float(match[0]), avg.total_time, power)
         text.set(power_num)
-        print(power_num, end="\r")
 
 
 if __name__ == '__main__':
     gui = tk.Tk()
     gui.title("nvidia-power")
     x = int(gui.winfo_screenwidth() / 6)
-    y = int(0.3 * x)
+    y = int(0.2 * x)
     gui.geometry("{}x{}".format(x, y))
     text = tk.StringVar()
     font = tk_font.Font(size=20)
